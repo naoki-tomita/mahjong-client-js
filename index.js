@@ -1,10 +1,19 @@
 var url = require( "url" ),
-    MahjongClient = require( "./MJSONPWebSocketClient.js" ),
+    MahjongClient,
     ai, path, name;
 
 path = url.parse( process.argv[ 2 ] );
 name = process.argv[ 3 ];
 ai = require( process.argv[ 4 ] ? process.argv[ 4 ] : "./TsumogiriMan.js" );
+
+switch( path.protocol ) {
+  case "ws:":
+    MahjongClient = require( "./MJSONPWebSocketClient" );
+    break;
+  case "mjsonp:":
+    MahjongClient = require( "./MJSONPSocketClient" );
+    break;
+}
 
 var MahjongApp = {
   initialize: function( client, ai ) {
