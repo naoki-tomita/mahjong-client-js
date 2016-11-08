@@ -1,5 +1,5 @@
 var url = require( "url" ),
-    MahjongClient = require( "./MahjongClient.js" ),
+    MahjongClient = require( "./MJSONPWebSocketClient.js" ),
     ai, path, name;
 
 path = url.parse( process.argv[ 2 ] );

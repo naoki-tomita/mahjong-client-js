@@ -1,0 +1,22 @@
+{
+  "name": "mahjong-client-js",
+  "version": "1.0.0",
+  "description": "mahjong client with javascript",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://naoki-tomita@github.com/naoki-tomita/mahjong-client-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/naoki-tomita/mahjong-client-js/issues"
+  },
+  "homepage": "https://github.com/naoki-tomita/mahjong-client-js#readme",
+  "devDependencies": {
+    "websocket": "^1.0.23"
+  }
+}
