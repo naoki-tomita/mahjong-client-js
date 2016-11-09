@@ -1,8 +1,8 @@
 var net = require( "net" ),
-    EventHandler = require( "./EventHandler.js" );
+    EventHandler = require( "./event-handler" );
 
 var MahjongClient = {
-  initialize: function( path, name ) {
+  init: function( path, name ) {
     this.path = path;
     console.log( this.path );
     this.name = name;

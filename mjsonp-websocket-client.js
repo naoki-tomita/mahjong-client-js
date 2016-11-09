@@ -1,9 +1,9 @@
 var WebSocket = require( "websocket" ),
-    EventHandler = require( "./EventHandler.js" ),
+    EventHandler = require( "./event-handler" ),
     MahjongClient;
 
 MahjongClient = {
-  initialize: function( path, name ) {
+  init: function( path, name ) {
     this.path = path;
     this.name = name;
     this.initializeHandler();

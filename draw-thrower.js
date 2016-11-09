@@ -1,5 +1,5 @@
 var MahjongMan = {
-  initialize: function( options ) {
+  init: function( options ) {
     this.id = options.game.id;
     this.Pais = options.kyoku.tehais[ this.id ];
   },

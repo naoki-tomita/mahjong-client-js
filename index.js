@@ -4,14 +4,14 @@ var url = require( "url" ),
 
 path = url.parse( process.argv[ 2 ] );
 name = process.argv[ 3 ];
-ai = require( process.argv[ 4 ] ? process.argv[ 4 ] : "./TsumogiriMan.js" );
+ai = require( process.argv[ 4 ] ? "./" + process.argv[ 4 ] : "./draw-thrower" );
 
 switch( path.protocol ) {
   case "ws:":
-    MahjongClient = require( "./MJSONPWebSocketClient" );
+    MahjongClient = require( "./mjsonp-websocket-client" );
     break;
   case "mjsonp:":
-    MahjongClient = require( "./MJSONPSocketClient" );
+    MahjongClient = require( "./mjsonp-client" );
     break;
 }
 
@@ -34,7 +34,7 @@ var MahjongApp = {
       if ( !mjson ) {
         return;
       }
-      that.ai.initialize( {
+      that.ai.init( {
         game: that.game,
         kyoku: mjson
       } );
@@ -51,5 +51,5 @@ var MahjongApp = {
   }
 };
 
-MahjongClient.initialize( path, name );
+MahjongClient.init( path, name );
 MahjongApp.initialize( MahjongClient, ai );
