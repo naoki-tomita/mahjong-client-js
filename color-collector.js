@@ -3,7 +3,16 @@ var MahjongMan = {
     this.id = options.game.id;
     this.Pais = options.kyoku.tehais[ this.id ];
   },
-  calc: function( draw ) {
+  calc: function( event ) {
+    switch ( event.type ) {
+      case "tsumo":
+        return this._tsumo( event );
+      default:
+        return;
+    }
+    return;
+  },
+  _tsumo: function( draw ) {
     if ( draw.actor !== this.id ) {
       return;
     }
@@ -13,9 +22,6 @@ var MahjongMan = {
       pai: draw.pai,
       tsumogiri: true
     };
-  },
-  check: function( put ) {
-    return;
   }
 };
 

@@ -40,16 +40,8 @@ var MahjongApp = {
       } );
       that.client.none();
     } );
-    this.client.on( "tsumo", function( mjson ) {
-      var turn = that.ai.calc( mjson );
-      if ( turn ) {
-        that.client.send( turn );
-        return;
-      }
-      that.client.none();
-    } );
     this.client.on( "event", function( mjson ) {
-      var turn = that.ai.check( mjson );
+      var turn = that.ai.calc( mjson );
       if ( turn ) {
         that.client.send( turn );
         return;

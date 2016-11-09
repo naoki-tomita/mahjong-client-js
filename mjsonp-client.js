@@ -39,10 +39,6 @@ var MahjongClient = {
           that.trigger( "start_kyoku", mjson );
           break;
 
-        case "tsumo":
-          that.trigger( "tsumo", mjson );
-          break;
-
         default:
           that.trigger( "event", mjson );
           break;

@@ -46,6 +46,7 @@ MahjongClient = {
       }
       console.log( "<- ", mjson );
       switch ( mjson.type ) {
+        // event you want to handle, add case.
         case "hello" :
           that.join();
           break;
@@ -56,10 +57,6 @@ MahjongClient = {
 
         case "start_kyoku":
           that.trigger( "start_kyoku", mjson );
-          break;
-
-        case "tsumo":
-          that.trigger( "tsumo", mjson );
           break;
 
         default:
