@@ -1,10 +1,12 @@
-var net = require( "net" ),
-    EventHandler = require( "./event-handler" );
+"use strict";
 
-var MahjongClient = {
+var WebSocket = require( "websocket" ),
+    EventHandler = require( "../utils/event-handler" ),
+    MahjongClient;
+
+MahjongClient = {
   init: function( path, name ) {
     this.path = path;
-    console.log( this.path );
     this.name = name;
     this.initializeHandler();
     this.initializeSocket();
@@ -13,20 +15,40 @@ var MahjongClient = {
     this.handler = new EventHandler();
   },
   initializeSocket: function() {
-    var that = this;
-    this.socket = new net.Socket();
-    this.socket.connect( this.path.port, this.path.hostname, function() {
-      console.log( "connected to", that.path );
+    var that = this, socket;
+    socket = new WebSocket.client();
+    socket.on( "connectFailed", function( error ) {
+      console.error( error );
     } );
-    this.socket.on( "data", function( data ) {
-      var mjson = data.toString( "utf-8" );
+    socket.on( "connect", function( connection ) {
+      console.log( "connected to ", that.path );
+      that.connection = connection;
+      that.initializeConnectionEvents();
+    } );
+    socket.connect( this.path.href, "" );
+  },
+  initializeConnectionEvents: function() {
+    var that = this;
+    this.connection.on( "error", function( error ) {
+      console.error( error );
+    } );
+    this.connection.on( "close", function() {
+      console.log( "connection closed" );
+      that.closed = true;
+    } );
+    this.connection.on( "message", function( data ) {
+      var mjson;
+      if ( data.type !== "utf8" ) {
+        return;
+      }
       try {
-        mjson = JSON.parse( mjson );
+        mjson = JSON.parse( data.utf8Data );
       } catch ( e ) {
         return;
       }
       console.log( "<- ", mjson );
       switch ( mjson.type ) {
+        // event you want to handle, add case.
         case "hello" :
           that.join();
           break;
@@ -44,10 +66,6 @@ var MahjongClient = {
           break;
       }
     } );
-    this.socket.on( "close", function() {
-      console.log( "closed" );
-      that.closed = true;
-    } );
   },
   join: function() {
     this.send( {
@@ -62,11 +80,11 @@ var MahjongClient = {
     } );
   },
   send: function( mjson ) {
-    if ( this.closed || !this.socket ) {
+    if ( this.closed || !this.connection ) {
       return;
     }
     console.log( "-> ", mjson );
-    this.socket.write( JSON.stringify( mjson ) + "\n" );
+    this.connection.sendUTF( JSON.stringify( mjson ) + "\n" );
   },
   on: function( event, callback ) {
     this.handler.on( event, callback );

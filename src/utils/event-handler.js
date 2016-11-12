@@ -1,3 +1,5 @@
+"use strict";
+
 var EventHandler = function() {
   this.on = function( event, callback ) {
     this[ event ] = this[ event ] || [];

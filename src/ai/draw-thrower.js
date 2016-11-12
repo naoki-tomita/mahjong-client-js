@@ -1,3 +1,5 @@
+"use strict";
+
 var MahjongMan = {
   init: function( options ) {
     this.id = options.game.id;

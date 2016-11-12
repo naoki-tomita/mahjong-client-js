@@ -4,14 +4,14 @@ var url = require( "url" ),
 
 path = url.parse( process.argv[ 2 ] );
 name = process.argv[ 3 ];
-ai = require( process.argv[ 4 ] ? "./" + process.argv[ 4 ] : "./draw-thrower" );
+ai = require( process.argv[ 4 ] ? "./src/ai/" + process.argv[ 4 ] : "./src/ai/draw-thrower" );
 
 switch( path.protocol ) {
   case "ws:":
-    MahjongClient = require( "./mjsonp-websocket-client" );
+    MahjongClient = require( "./src/services/mjsonp-websocket-client" );
     break;
   case "mjsonp:":
-    MahjongClient = require( "./mjsonp-client" );
+    MahjongClient = require( "./src/services/mjsonp-client" );
     break;
 }
 
