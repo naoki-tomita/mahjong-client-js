@@ -4,4 +4,6 @@
 
 # getting started
 1. `npm install`
-1. `node index.js [server path (like mjsonp://gimite.net:11600/manue-1kyoku)] [user name] [AI module (optional)]`
+1. `node index.js [server path (like ws://www.logos.t.u-tokyo.ac.jp/mjai/)] [user name] [AI module (optional)]`
+
+server path is useable like `mjsonp://gimite.net:11600/manue-1kyoku` too.
