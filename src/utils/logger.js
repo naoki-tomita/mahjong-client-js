@@ -4,40 +4,40 @@ var Logger = function( level ) {
   this.level = level;
 };
 
-Logger.prototype.VERBOSE = 0;
-Logger.prototype.DEBUG = 1;
-Logger.prototype.INFO = 2;
-Logger.prototype.WARNING = 3;
-Logger.prototype.ERROR = 4;
+Logger.VERBOSE = 0;
+Logger.DEBUG = 1;
+Logger.INFO = 2;
+Logger.WARNING = 3;
+Logger.ERROR = 4;
 
 Logger.prototype.verbose = function() {
-  if ( this.level >== Logger.VERBOSE ) {
+  if ( this.level <= Logger.VERBOSE ) {
     console.log.apply( console, arguments );
   }
 };
 
 Logger.prototype.debug = function() {
-  if ( this.level >== Logger.DEBUG ) {
+  if ( this.level <= Logger.DEBUG ) {
     console.log.apply( console, arguments );
   }
 };
 
 Logger.prototype.info = function() {
-  if ( this.level >== Logger.INFO ) {
+  if ( this.level <= Logger.INFO ) {
     console.log.apply( console, arguments );
   }
 };
 
 Logger.prototype.warn = function() {
-  if ( this.level >== Logger.WARNING ) {
+  if ( this.level <= Logger.WARNING ) {
     console.log.apply( console, arguments );
   }
 };
 
 Logger.prototype.error = function() {
-  if ( this.level >== Logger.ERROR ) {
+  if ( this.level <= Logger.ERROR ) {
     console.log.apply( console, arguments );
   }
 };
 
-module.exports = Logger;
+module.exports = new Logger( Logger[ process.argv[ 5 ] ] );

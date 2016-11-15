@@ -2,6 +2,7 @@
 
 var WebSocket = require( "websocket" ),
     EventHandler = require( "../utils/event-handler" ),
+    logger = require( "../utils/logger" ),
     MahjongClient;
 
 MahjongClient = {
@@ -18,10 +19,10 @@ MahjongClient = {
     var that = this, socket;
     socket = new WebSocket.client();
     socket.on( "connectFailed", function( error ) {
-      console.error( error );
+      logger.error( error );
     } );
     socket.on( "connect", function( connection ) {
-      console.log( "connected to ", that.path );
+      logger.info( "connected to ", that.path );
       that.connection = connection;
       that.initializeConnectionEvents();
     } );
@@ -30,10 +31,10 @@ MahjongClient = {
   initializeConnectionEvents: function() {
     var that = this;
     this.connection.on( "error", function( error ) {
-      console.error( error );
+      logger.error( error );
     } );
     this.connection.on( "close", function() {
-      console.log( "connection closed" );
+      logger.info( "connection closed" );
       that.closed = true;
     } );
     this.connection.on( "message", function( data ) {
@@ -46,7 +47,7 @@ MahjongClient = {
       } catch ( e ) {
         return;
       }
-      console.log( "<- ", mjson );
+      logger.verbose( "<- ", mjson );
       switch ( mjson.type ) {
         // event you want to handle, add case.
         case "hello" :
@@ -59,6 +60,16 @@ MahjongClient = {
 
         case "start_kyoku":
           that.trigger( "start_kyoku", mjson );
+          break;
+
+        case "end_kyoku":
+          logger.info( "--------------------" );
+          that.trigger( "end_kyoku", mjson );
+          break;
+
+        case "error":
+          logger.error( mjson );
+          that.trigger( "error", mjson );
           break;
 
         default:
@@ -83,7 +94,7 @@ MahjongClient = {
     if ( this.closed || !this.connection ) {
       return;
     }
-    console.log( "-> ", mjson );
+    logger.verbose( "-> ", mjson );
     this.connection.sendUTF( JSON.stringify( mjson ) + "\n" );
   },
   on: function( event, callback ) {

@@ -4,7 +4,7 @@ var MahjongMan = {
   init: function( options ) {
     this.id = options.game.id;
     this.pais = options.kyoku.tehais[ this.id ];
-    this.color = ( [ "m", "p", "s" ] )[ Math.floor( Math.random() * 3 ) ]; // man, pin, so, char
+    this.color = this._maxColor();
   },
   calc: function( event ) {
     switch ( event.type ) {
@@ -15,22 +15,40 @@ var MahjongMan = {
     }
     return;
   },
+  _maxColor: function() {
+    var m = 0, p = 0, s = 0;
+    for ( var i in this.pais ) {
+      if ( this.pais[ i ].indexOf( "m" ) ) {
+        m++;
+      } else if ( this.pais[ i ].indexOf( "p" ) ) {
+        p++;
+      } else if ( this.pais[ i ].indexOf( "s" ) ) {
+        s++;
+      }
+    }
+    if ( m < p ) {
+      if ( p < s ) {
+        return "s";
+      }
+      return "p";
+    } else {
+      if ( m < s ) {
+        return "s";
+      }
+      return "m";
+    }
+  },
   _tsumo: function( draw ) {
     var putPai;
     if ( draw.actor !== this.id ) {
       return;
     }
-    switch ( draw.possible_actions ) {
-      case "hora":
-        return {
-          type: "hora",
-          actor: this.id,
-          target: this.id,
-          pai: draw.pai
-        };
-      default:
-        return this._getPutPai( draw );
+    for ( var i in draw.possible_actions ) {
+      if ( draw.possible_actions[ i ].type === "hora" ) {
+        return draw.possible_actions[ i ];
+      }
     }
+    return this._getPutPai( draw );
   },
   _isNeededColor: function( pai ) {
     if ( this._isWind( pai ) ) {
@@ -49,6 +67,7 @@ var MahjongMan = {
     return pai.indexOf( pai.toUpperCase() ) !== -1;
   },
   _getPutPai: function( draw ) {
+    var putPai;
     // 狙っている色と同じ色の牌をツモったら、それ以外の色を捨てる。
     if ( this._isNeededColor( draw.pai ) ) {
       putPai = this.pais.splice( this._getUnneededPaiIndex(), 1, draw.pai );
