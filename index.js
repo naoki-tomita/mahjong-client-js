@@ -47,7 +47,10 @@ var MahjongApp = {
         return;
       }
       that.client.none();
-    } )
+    } );
+    this.client.on( "error", function(mjson) {
+      that.client.none();
+    } );
   }
 };
 

@@ -22,7 +22,7 @@ var MahjongMan = {
   _countPai: function( pai ) {
     var count = 0;
     for ( var i in this.pais ) {
-      if ( this.pais[ i ].indexOf( pai ) !== -1 ) {
+      if ( this.pais[ i ].indexOf( pai ) === 0 ) {
         count++;
       }
     }
@@ -64,12 +64,15 @@ var MahjongMan = {
     for ( var i in event.possible_actions ) {
       switch ( event.possible_actions[ i ].type ) {
         case "hora":
+          logger.error( "hora!!!!!!!", event.possible_actions[ i ] );
           return event.possible_actions[ i ];
         case "pon":
+          logger.error( "pon!!!!!!!", event.possible_actions[ i ] );
           act = this._pon( event.possible_actions[ i ] );
           break;
         case "daiminkai":
-          act = this._daiminkan( event.possible_actions[ i ] );
+          // logger.error( "kan!!!!!!!", event.possible_actions[ i ] );
+          // act = this._daiminkan( event.possible_actions[ i ] );
           break;
         case "chi":
         default:
@@ -89,6 +92,9 @@ var MahjongMan = {
     for ( var i in event.possible_actions ) {
       switch ( event.possible_actions[ i ].type ) {
         case "ankan":
+          // return event.possible_actions[ i ];
+          break;
+        case "hora":
           return event.possible_actions[ i ];
         default:
           break;
@@ -96,6 +102,7 @@ var MahjongMan = {
     }
 
     this.pais.push( event.pai );
+    this._collectToitz();
     putPai = this._calcPutpai();
     tsumogiri = event.pai === putPai;
     return {
@@ -159,8 +166,27 @@ var MahjongMan = {
       putPai = p3[ 0 ];
       logger.info( "p3" );
     }
-    logger.info( "<-", putPai );
-    return this.pais.splice( this.pais.indexOf( putPai ), 1 )[ 0 ];
+
+    return this._getPutPai( putPai );
+  },
+  _getPutPai: function( pai ) {
+    for( var i in this.pais ) {
+      if ( this.pais[ i ].indexOf( pai ) === 0 ) {
+        return this.pais.splice( i, 1 )[ 0 ];
+      }
+    }
+  },
+  _collectToitz: function() {
+    var hashPais = this._hashPais();
+    for ( var k in hashPais ) {
+      if ( hashPais[ k ] === 3 ) {
+        for ( var i in this.pais ) {
+          if ( this.pais[ i ].indexOf( k ) === 0 ) {
+            logger.error( "deleted", this.pais.splice( i, 1 ) );
+          }
+        }
+      }
+    }
   }
 };
 
