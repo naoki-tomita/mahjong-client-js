@@ -51,6 +51,9 @@ var MahjongApp = {
     this.client.on( "error", function(mjson) {
       that.client.none();
     } );
+    this.client.on( "end_game", function(mjson) {
+      that.client.none();
+    } );
   }
 };
 

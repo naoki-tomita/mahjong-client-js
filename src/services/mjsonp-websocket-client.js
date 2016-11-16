@@ -62,6 +62,11 @@ MahjongClient = {
           that.trigger( "start_kyoku", mjson );
           break;
 
+        case "end_game":
+          logger.info( mjson );
+          that.trigger( "end_game", mjson );
+          break;
+
         case "error":
           logger.error( mjson );
           that.trigger( "error", mjson );
