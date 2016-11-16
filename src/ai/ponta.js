@@ -177,10 +177,10 @@ var MahjongMan = {
     }
   },
   _collectToitz: function() {
-    var hashPais = this._hashPais();
+    var hashPais = this._hashPais(), deletedPais = this.pais;
     for ( var k in hashPais ) {
       if ( hashPais[ k ] === 3 ) {
-        for ( var i in this.pais ) {
+        for ( var i = this.pais.length - 1; i >= 0; i-- ) {
           if ( this.pais[ i ].indexOf( k ) === 0 ) {
             logger.error( "deleted", this.pais.splice( i, 1 ) );
           }

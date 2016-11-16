@@ -40,4 +40,4 @@ Logger.prototype.error = function() {
   }
 };
 
-module.exports = new Logger( Logger[ process.argv[ 5 ] ] );
+module.exports = new Logger( Logger.VERBOSE );
