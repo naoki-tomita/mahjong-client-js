@@ -53,6 +53,7 @@ var MahjongApp = {
     } );
     this.client.on( "end_game", function(mjson) {
       that.client.none();
+      that.client.close();
     } );
   }
 };

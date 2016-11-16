@@ -51,14 +51,17 @@ MahjongClient = {
       switch ( mjson.type ) {
         // event you want to handle, add case.
         case "hello" :
+          logger.info( mjson );
           that.join();
           break;
 
         case "start_game":
+          logger.info( mjson );
           that.trigger( "start_game", mjson );
           break;
 
         case "start_kyoku":
+          logger.info( mjson );
           that.trigger( "start_kyoku", mjson );
           break;
 
@@ -68,7 +71,7 @@ MahjongClient = {
           break;
 
         case "error":
-          logger.error( mjson );
+          logger.info( mjson );
           that.trigger( "error", mjson );
           break;
 
@@ -89,6 +92,9 @@ MahjongClient = {
     this.send( {
       type: "none"
     } );
+  },
+  close: function() {
+    this.connection.close();
   },
   send: function( mjson ) {
     if ( this.closed || !this.connection ) {

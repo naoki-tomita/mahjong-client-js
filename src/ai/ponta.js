@@ -30,7 +30,6 @@ var MahjongMan = {
   },
   calc: function( event ) {
     var act;
-    logger.verbose( "calc", event );
     switch ( event.type ) {
       case "tsumo":
         act = this._tsumo( event );
@@ -60,19 +59,14 @@ var MahjongMan = {
   },
   _dahai: function( event ) {
     var act;
-    logger.debug( "_dahai", event );
     for ( var i in event.possible_actions ) {
       switch ( event.possible_actions[ i ].type ) {
         case "hora":
-          logger.error( "hora!!!!!!!", event.possible_actions[ i ] );
           return event.possible_actions[ i ];
         case "pon":
-          logger.error( "pon!!!!!!!", event.possible_actions[ i ] );
           act = this._pon( event.possible_actions[ i ] );
           break;
         case "daiminkai":
-          // logger.error( "kan!!!!!!!", event.possible_actions[ i ] );
-          // act = this._daiminkan( event.possible_actions[ i ] );
           break;
         case "chi":
         default:
@@ -85,14 +79,13 @@ var MahjongMan = {
   },
   _tsumo: function( event ) {
     var putPai, tsumogiri = false;
-    logger.debug( "_tsumo", event );
     if ( event.actor !== this.id ) {
       return;
     }
     for ( var i in event.possible_actions ) {
       switch ( event.possible_actions[ i ].type ) {
         case "ankan":
-          // return event.possible_actions[ i ];
+          return event.possible_actions[ i ];
           break;
         case "hora":
           return event.possible_actions[ i ];
@@ -114,7 +107,6 @@ var MahjongMan = {
   },
   _pon: function( possible_action ) {
     var hashPais = this._hashPais();
-    logger.debug( "_pon", possible_action );
     // 既に同じのを三枚持っている(ポンできるのにリストにない)場合はポンしてはいけない
     if ( hashPais[ possible_action.pai ] === 0 ) {
       return;
@@ -126,7 +118,6 @@ var MahjongMan = {
     return possible_action;
   },
   _hasPossibleActions: function( event, type ) {
-    logger.debug( "_hasPossibleActions", event, type );
     for ( var i in event.possible_actions ) {
       if ( event.possible_actions[ i ].actor === this.id &&
            event.possible_actions[ i ].type === type ) {
@@ -137,7 +128,6 @@ var MahjongMan = {
   },
   _calcPutpai: function() {
     var p4 = [], p3 = [], p2 = [], p1 = [], putPai, hashPais = this._hashPais();
-    logger.debug( "_calcPutpai" );
     for ( var k in hashPais ) {
       switch( hashPais[ k ] ) {
         case 4:
@@ -179,10 +169,10 @@ var MahjongMan = {
   _collectToitz: function() {
     var hashPais = this._hashPais(), deletedPais = this.pais;
     for ( var k in hashPais ) {
-      if ( hashPais[ k ] === 3 ) {
+      if ( hashPais[ k ] >= 3 ) {
         for ( var i = this.pais.length - 1; i >= 0; i-- ) {
           if ( this.pais[ i ].indexOf( k ) === 0 ) {
-            logger.error( "deleted", this.pais.splice( i, 1 ) );
+            this.pais.splice( i, 1 );
           }
         }
       }
