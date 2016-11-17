@@ -1,4 +1,5 @@
-var ai = require( "../../src/ai/ponta" ),
+var ai = require( "../../src/ai/tsuchida-system" ),
+    _ = require( "../../src/utils/_" ),
     chai = require( "chai" ),
     helper = require( "../helpers/helper.js" );
 
@@ -7,12 +8,12 @@ global.assert = chai.assert;
 describe( "ai", function() {
   var tests = [
     { tsumo: "1m", dahai: "2m" },
-    { tsumo: "1m", dahai: "3m" },
-    { tsumo: "4m", dahai: "6m" },
-    { tsumo: "4m", dahai: "7m" },
-    { tsumo: "5m", dahai: "8m" },
-    { tsumo: "8p", dahai: "9m" },
-    { tsumo: "9p", dahai: "9p" },
+    { tsumo: "1m", dahai: "1m" },
+    { tsumo: "4m", dahai: "3m" },
+    { tsumo: "6m", dahai: "7m" },
+    { tsumo: "9m", dahai: "8m" },
+    { tsumo: "8p", dahai: "8p" },
+    { tsumo: "9p", dahai: "7m" },
   ];
   before( function() {
     ai.init( {
@@ -32,7 +33,7 @@ describe( "ai", function() {
         pai: test.tsumo,
         actor: 0
       } );
-      displayHashPais( ai._hashPais() );
+      displayHashPais( _.createPaiNums( ai.pais ) );
       assert.equal( put.pai, test.dahai );
     } );
   } );

@@ -1,66 +1,50 @@
-"use strict";
+var Base = require( "./base" ),
+    _ = require( "../utils/_" ),
+    logger = require( "../utils/logger" ),
+    MahjongMan;
 
-var MahjongMan = {
-  init: function( options ) {
-    this.id = options.game.id;
-    this.Pais = options.kyoku.tehais[ this.id ];
-  },
-  calc: function( event ) {
-    var act;
-    switch ( event.type ) {
-      case "tsumo":
-        act = this._tsumo( event );
-        break;
-      case "dahai":
-        act = this._dahai( event );
-        break;
-      case "pon":
-      case "hora":
-      case "reach":
-      case "reach_accepted":
-      case "chi":
-      case "ankan":
-      case "kakan":
-      case "daiminkai":
-      case "dora":
-      default:
-        break;
-    }
-    return;
-  },
-  _tsumo: function( event ) {
-    if ( event.actor !== this.id ) {
-      return;
-    }
-    for ( var i in event.possible_actions ) {
-      switch ( event.possible_actions[ i ].type ) {
-        case "ankan":
-        case "kakan":
-          return event.possible_actions[ i ];
-        case "reach":
-          this._reach( event.possible_actions[ i ] );
-        default:
-          break;
+MahjongMan = _.extend( Base, {
+  calculate: function( tsumo ) {
+    var hash = _.createPaiNums( this.pais ), put;
+    // ふたつ揃ったやつは全部無視する。
+    for ( var k in hash ) {
+      if ( hash[ k ] === 2 ) {
+        this.pais = _.exclusionPais( this.pais, k );
       }
     }
+    put = this._calcUnnecessaryPai();
+    if ( _.isRed( this.pais, put ) ) {
+      put = put + "r";
+    }
+    return {
+      type: "dahai",
+      actor: this.id,
+      tsumogiri: tsumo.pai === put,
+      pai: put
+    };
   },
-  _calc: function( tsumo ) {
-
+  reach: function( action ) {
+    return action;
   },
-  _reach: function( action ) {
-
+  hora: function( action ) {
+    return action;
   },
-  _dahai: function( event ) {
-    for ( var i in event.possible_actions ) {
-      switch ( event.possible_actions[ i ].type ) {
-        case "daiminkai":
-        case "kakan":
-          return event.possible_actions[ i ];
+  putForReach: function() {
+    return this.calculate( { pai: undefined } );
+  },
+  _calcUnnecessaryPai: function() {
+    var hash = _.createPaiNums( this.pais );
+    for ( var k in hash ) {
+      switch ( hash[ k ] ) {
+        case 3:
+          return k;
+        case 1:
+          return k;
         default:
           break;
       }
     }
   }
-};
+} );
 
 module.exports = MahjongMan;

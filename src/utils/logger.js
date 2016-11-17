@@ -40,4 +40,4 @@ Logger.prototype.error = function() {
   }
 };
 
-module.exports = new Logger( Logger.VERBOSE );
+module.exports = new Logger( Logger.INFO );
